@@ -2,7 +2,7 @@
 CS348 final project
 The file assumes you have three folders
 
--Python
-  ㄴtemplates
--sqlcode
--database
+-Python \n
+  ㄴtemplates \n
+-sqlcode \n
+-database  \n
