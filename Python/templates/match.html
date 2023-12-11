@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Cup Database</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    body {
+        color: #404E67;
+        background: #F5F7FA;
+  font-family: 'Open Sans', sans-serif;
+ }
+ .table-wrapper {
+  width: 90%;
+  margin: 30px auto;
+        background: #fff;
+        padding: 20px; 
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+    .table-title {
+        padding-bottom: 10px;
+        margin: 0 0 10px;
+    }
+    .table-title h2 {
+        margin: 6px 0 0;
+        font-size: 22px;
+    }
+    .table-title .add-new {
+        float: right;
+  height: 30px;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: none;
+  min-width: 100px;
+  border-radius: 50px;
+  line-height: 13px;
+    }
+ .table-title .add-new i {
+  margin-right: 4px;
+ }
+    table.table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+    }
+    table.table th, table.table td {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+    table.table th:nth-child(4), table.table td:nth-child(4) { 
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    table.table th:nth-child(7), table.table td:nth-child(7), 
+    table.table th:nth-child(8), table.table td:nth-child(8),
+    table.table th:nth-child(9), table.table td:nth-child(9) {
+        font-size: 13px;
+        width: 115px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    table.table th:last-child {
+        width: 100px;
+    }
+    table.table td a {
+  cursor: pointer;
+        display: inline-block;
+        margin: 0 5px;
+  min-width: 24px;
+    }   
+ table.table td a.add {
+        color: #27C46B;
+    }
+    table.table td a.edit {
+        color: #FFC107;
+    }
+    table.table td a.delete {
+        color: #E34724;
+    }
+    table.table td i {
+        font-size: 19px;
+    }
+ table.table td a.add i {
+        font-size: 24px;
+     margin-right: -1px;
+        position: relative;
+        top: 3px;
+    }    
+    table.table .form-control {
+        height: 32px;
+        line-height: 32px;
+        box-shadow: none;
+        border-radius: 2px;
+    }
+ table.table .form-control.error {
+  border-color: #f50000;
+ }
+ table.table td .add {
+  display: none;
+ }
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    var actions = $("table td:last-child").html();
+    // Append table with add row form on add new button click
+    $(".add-new").click(function(){
+        $(this).attr("disabled", "disabled");
+        var index = $("table tbody tr:last-child").index();
+        var row = '<tr>' +
+            '<td><input type="number" class="form-control" name="RoundID" id="numROID"></td>' +
+            '<td><input type="number" class="form-control" name="MatchID" id="numMID"></td>' +
+            '<td><input type="number" class="form-control" name="ResultID" id="numREID"></td>' +
+            '<td><input type="number" class="form-control" name="_Year" id="numYear"></td>' +
+            '<td><input type="date" class="form-control" name="_Datetime" id="dateDatetime"></td>' +
+            '<td><input type="text" class="form-control" name="Stage" id="txtStage"></td>' +
+            '<td><input type="text" class="form-control" name="Stadium" id="txtStadium"></td>' +
+            '<td><input type="text" class="form-control" name="City" id="txtCity"></td>' +
+            '<td><input type="text" class="form-control" name="HomeTeamName" id="txtHomeTeamName"></td>' +
+            '<td><input type="text" class="form-control" name="AwayTeamName" id="txtAwayTeamName"></td>' +
+            '<td><input type="number" class="form-control" name="Attendance" id="numAttendance"></td>' +
+            '<td><input type="text" class="form-control" name="HomeTeamInitialsMatches Played" id="txtHomeTeamInitials"></td>' +
+            '<td><input type="text" class="form-control" name="AwayTeamInitials" id="txtAwayTeamInitials"></td>' +
+            '<td>' + actions + '</td>' +
+        '</tr>';
+        $("table").append(row);  
+        $("table tbody tr").eq(index + 1).find(".add, .edit, .delete").toggle();
+        $('[data-toggle="tooltip"]').tooltip();
+ 
+    });
+   
+    // Add row on add button click
+    $(document).on("click", ".add", function(){
+        var empty = false;
+        var input = $(this).parents("tr").find('input[type="text"]');
+        input.each(function(){
+            if(!$(this).val()){
+                $(this).addClass("error");
+                empty = true;
+            } else{
+                $(this).removeClass("error");
+            }
+        });
+
+        var _Year = $("#numROID").val();
+        var Country = $("#numMID").val();
+        var Winner = $("#numREID").val();
+        var RunnersUp = $("#numYear").val();
+        var Third = $("#dateDatetime").val();
+        var Fourth = $("#txtStage").val();
+        var GoalsScored = $("#txtStadium").val();
+        var QualifiedTeams = $("#txtHomeTeamName").val();
+        var MatchesPlayed = $("#txtAwayTeamName").val();
+        var Attendance = $("#numAttendance").val();
+        var MatchesPlayed = $("#txtHomeTeamInitials").val();
+        var Attendance = $("#            '<td><input type="text" class="form-control" name="AwayTeamInitials" id="txtAwayTeamInitials"></td>' +
+").val();
+
+        $.post("/ajax_add", { 
+            _Year: _Year, 
+            Country: Country, 
+            Winner: Winner, 
+            RunnersUp: RunnersUp, 
+            Third: Third, 
+            Fourth: Fourth, 
+            GoalsScored: GoalsScored, 
+            QualifiedTeams: QualifiedTeams, 
+            MatchesPlayed: MatchesPlayed, 
+            Attendance: Attendance
+        }, function(data) {
+            $("#displaymessage").html(data);
+            $("#displaymessage").show();
+        });
+        $(this).parents("tr").find(".error").first().focus();
+        if(!empty){
+            input.each(function(){
+                $(this).parent("td").html($(this).val());
+            });   
+            $(this).parents("tr").find(".add, .edit").toggle();
+            $(".add-new").removeAttr("disabled");
+        } 
+    });
+    // Delete row on delete button click
+    $(document).on("click", ".delete", function(){
+        $(this).parents("tr").remove();
+        $(".add-new").removeAttr("disabled");
+        var _Year = $(this).attr("id"); // Retrieve _Year from the button's id
+        string = _Year
+        console.log("_Year value: ", _Year);
+        $.post("/ajax_delete", { string: string}, function(data) {
+            $("#displaymessage").html(data);
+            $("#displaymessage").show();
+        });
+    });
+    // update rec row on edit button click
+    $(document).on("click", ".update", function(){
+        var currentRow = $(this).closest("tr");
+        var _Year = currentRow.find("td:eq(0) input").val();
+        var Country = currentRow.find("td:eq(1) input").val();
+        var Winner = currentRow.find("td:eq(2) input").val();
+        var RunnersUp = currentRow.find("td:eq(3) input").val();
+        var Third = currentRow.find("td:eq(4) input").val();
+        var Fourth = currentRow.find("td:eq(5) input").val();
+        var GoalsScored = currentRow.find("td:eq(6) input").val();
+        var QualifiedTeams = currentRow.find("td:eq(7) input").val();
+        var MatchesPlayed = currentRow.find("td:eq(8) input").val();
+        var Attendance = currentRow.find("td:eq(9) input").val();
+        var currentRow =  $(this).parents("tr")
+        $.post("/ajax_update", { 
+            _Year: _Year, 
+            Country: Country, 
+            Winner: Winner, 
+            RunnersUp: RunnersUp, 
+            Third: Third, 
+            Fourth: Fourth, 
+            GoalsScored: GoalsScored, 
+            QualifiedTeams: QualifiedTeams, 
+            MatchesPlayed: MatchesPlayed, 
+            Attendance: Attendance
+        }, function(data) {
+            $("#displaymessage").html(data);
+            $("#displaymessage").show();
+            // Convert input fields back to text for all fields
+            currentRow.find("td").each(function(index) {
+                if (index < 10) { // Assuming 10 fields excluding the action buttons
+                    var inputVal = $(this).find("input").val();
+                    $(this).text(inputVal);
+                }
+            });
+            // Change the update button back to edit and toggle button states
+            currentRow.find(".update").removeClass("update").addClass("edit");
+            $(".add-new").removeAttr("disabled");
+        });
+    });
+    // Edit row on edit button click
+    $(document).on("click", ".edit", function(){  
+        $(this).parents("tr").find("td:not(:last-child)").each(function(i){
+            var text = $(this).text();
+            var inputType = 'text'; // Default input type
+            if (i === 0 || i === 6 || i === 8 || i === 9) { // Change to 'number' input for specific columns
+                inputType = 'number';
+            }
+            // Generate input field based on column index
+            var inputField = '<input type="' + inputType + '" class="form-control" value="' + text + '">';
+            $(this).html(inputField);
+        });
+        $(".add-new").attr("disabled", "disabled");
+        $(this).removeClass("edit").addClass("update");
+    });
+});
+</script> 
+</head>
+
+<body>
+    <div class="container"><p><h1 align="center">World Cub Park</h1></p>
+        <div class="table-wrapper">
+        <!-- Dropdown for Table Selection -->
+        <select id="tableSelector">
+        <option value="worldcup">World Cup</option>
+        <option value="matches">World Cup Matches</option>
+        <option value="players">Players</option>
+        <option value="referees">Referees</option>
+        <option value="results">Results</option>
+        </select>
+        </select>
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Worldcup <b>Details</b></h2></div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                    </div>
+                    <div class='btn btn-info' id="displaymessage" style="display:none;width:100%;margin-top:10px;"></div>
+                </div>
+            </div>
+   <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Country</th>
+                        <th>Winner</th>
+                        <th>RunnersUp</th>
+                        <th>Third</th>
+                        <th>Fourth</th>
+                        <th>GoalsScored</th>
+                        <th>QualifiedTeams</th>
+                        <th>MatchesPlayed</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in matches %}    
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                        <td>{{ row[5] }}</td>
+                        <td>{{ row[6] }}</td>
+                        <td>{{ row[7] }}</td>
+                        <td>{{ row[8] }}</td>
+                        <td>{{ row[9] }}</td>
+                        <td>
+                            <a class="add" title="Add" data-toggle="tooltip" id="{{row[0]}}"><i class="fa fa-user-plus"></i></a>
+                            <a class="edit" title="Edit" data-toggle="tooltip" id="{{row[0]}}"><i class="fa fa-pencil"></i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip" id="{{row[0]}}"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>   
+                    {% endfor %}    
+                </tbody>
+            </table>
+        </div>
+    </div>     
+</body>
+</html> 

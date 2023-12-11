@@ -1,0 +1,8 @@
+#app.yaml
+runtime: python311
+
+env_variables:
+  CLOUD_SQL_USERNAME: root
+  CLOUD_SQL_PASSWORD: 2283
+  CLOUD_SQL_DATABASE_NAME: worldcup
+  CLOUD_SQL_CONNECTION_NAME: cs348finalproject-407718:us-central1:worldcu
