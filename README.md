@@ -7,3 +7,5 @@ The file assumes you have three folders:
   - templates 
 - sqlcode 
 - database
+
+Please Run Webpage.py using Python Webpage.py and access to your local webpage.
